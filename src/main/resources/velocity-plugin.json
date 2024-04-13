@@ -1,0 +1,10 @@
+{
+  "id": "servermonitor",
+  "name": "ServerMonitor",
+  "version": "${project.version}",
+  "description": "${project.description}",
+  "authors": [
+    "Siroshun09"
+  ],
+  "main": "net.okocraft.servermonitor.ServerMonitorPlugin"
+}
