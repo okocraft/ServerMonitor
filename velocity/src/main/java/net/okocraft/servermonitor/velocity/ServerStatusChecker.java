@@ -1,4 +1,4 @@
-package net.okocraft.servermonitor;
+package net.okocraft.servermonitor.velocity;
 
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.ServerInfo;

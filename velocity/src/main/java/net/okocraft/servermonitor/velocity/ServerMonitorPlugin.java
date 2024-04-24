@@ -1,4 +1,4 @@
-package net.okocraft.servermonitor;
+package net.okocraft.servermonitor.velocity;
 
 import com.google.inject.Inject;
 import com.velocitypowered.api.command.SimpleCommand;
@@ -10,7 +10,7 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.scheduler.ScheduledTask;
 import net.kyori.adventure.text.Component;
-import net.okocraft.servermonitor.config.Config;
+import net.okocraft.servermonitor.velocity.config.Config;
 import org.slf4j.Logger;
 
 import java.io.IOException;

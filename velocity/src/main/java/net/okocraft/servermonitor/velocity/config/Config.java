@@ -1,4 +1,4 @@
-package net.okocraft.servermonitor.config;
+package net.okocraft.servermonitor.velocity.config;
 
 import com.github.siroshun09.configapi.core.serialization.key.KeyGenerator;
 import com.github.siroshun09.configapi.core.serialization.record.RecordSerialization;

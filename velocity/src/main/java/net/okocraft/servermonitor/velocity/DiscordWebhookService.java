@@ -1,10 +1,10 @@
-package net.okocraft.servermonitor;
+package net.okocraft.servermonitor.velocity;
 
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import com.velocitypowered.api.proxy.server.ServerInfo;
-import net.okocraft.servermonitor.config.Config;
-import net.okocraft.servermonitor.config.Notifications;
+import net.okocraft.servermonitor.velocity.config.Config;
+import net.okocraft.servermonitor.velocity.config.Notifications;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicReference;

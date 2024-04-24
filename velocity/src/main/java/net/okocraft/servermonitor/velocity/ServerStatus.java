@@ -1,9 +1,9 @@
-package net.okocraft.servermonitor;
+package net.okocraft.servermonitor.velocity;
 
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import com.velocitypowered.api.proxy.server.ServerInfo;
 import com.velocitypowered.api.proxy.server.ServerPing;
-import net.okocraft.servermonitor.config.Notifications;
+import net.okocraft.servermonitor.velocity.config.Notifications;
 import org.jetbrains.annotations.NotNull;
 
 public class ServerStatus {

@@ -1,0 +1,10 @@
+{
+  "id": "servermonitor",
+  "name": "ServerMonitor",
+  "version": "${projectVersion}",
+  "description": "A Velocity plugin that sends the server's status to Discord.",
+  "authors": [
+    "Siroshun09"
+  ],
+  "main": "net.okocraft.servermonitor.velocity.ServerMonitorPlugin"
+}
