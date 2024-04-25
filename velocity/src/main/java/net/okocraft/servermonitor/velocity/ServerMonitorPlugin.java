@@ -49,14 +49,14 @@ public class ServerMonitorPlugin {
         }
 
         this.start();
-        this.proxy.getCommandManager().register("smreload", new ReloadCommand());
+        this.proxy.getCommandManager().register("smvreload", new ReloadCommand());
 
         this.logger.info("Successfully enabled!");
     }
 
     @Subscribe(order = PostOrder.FIRST)
     public void onDisable(ProxyShutdownEvent ignored) {
-        this.proxy.getCommandManager().unregister("smreload");
+        this.proxy.getCommandManager().unregister("smvreload");
         this.stop();
 
         this.logger.info("Successfully disabled!");
