@@ -3,19 +3,19 @@ package net.okocraft.servermonitor.velocity;
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import com.velocitypowered.api.proxy.server.ServerInfo;
+import net.okocraft.servermonitor.core.config.ConfigHolder;
 import net.okocraft.servermonitor.velocity.config.Config;
 import net.okocraft.servermonitor.velocity.config.Notifications;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
 public class DiscordWebhookService {
 
-    private final AtomicReference<Config> configReference;
+    private final ConfigHolder<Config> configReference;
     private WebhookClient webhook;
 
-    public DiscordWebhookService(@NotNull AtomicReference<Config> configReference) {
+    public DiscordWebhookService(@NotNull ConfigHolder<Config> configReference) {
         this.configReference = configReference;
     }
 

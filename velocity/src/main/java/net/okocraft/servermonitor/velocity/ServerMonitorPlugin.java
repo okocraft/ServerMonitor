@@ -10,20 +10,21 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.scheduler.ScheduledTask;
 import net.kyori.adventure.text.Component;
+import net.okocraft.servermonitor.core.config.ConfigHolder;
 import net.okocraft.servermonitor.velocity.config.Config;
 import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.Duration;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.UnaryOperator;
 
 public class ServerMonitorPlugin {
 
     private final ProxyServer proxy;
     private final Logger logger;
     private final Path dataDirectory;
-    private final AtomicReference<Config> configReference;
+    private final ConfigHolder<Config> configHolder;
     private final DiscordWebhookService webhookService;
     private ScheduledTask monitorTask;
 
@@ -32,8 +33,8 @@ public class ServerMonitorPlugin {
         this.proxy = proxy;
         this.logger = logger;
         this.dataDirectory = dataDirectory;
-        this.configReference = new AtomicReference<>(Config.DEFAULT);
-        this.webhookService = new DiscordWebhookService(this.configReference);
+        this.configHolder = new ConfigHolder<>(Config.DEFAULT, UnaryOperator.identity());
+        this.webhookService = new DiscordWebhookService(this.configHolder);
     }
 
     @Subscribe(order = PostOrder.LAST)
@@ -41,7 +42,7 @@ public class ServerMonitorPlugin {
         this.logger.info("Loading config.yml...");
 
         try {
-            this.configReference.set(Config.loadFromYamlFile(this.dataDirectory.resolve("config.yml")));
+            this.configHolder.load(this.dataDirectory.resolve("config.yml"));
         } catch (IOException e) {
             this.logger.error("Could not load config.yml", e);
             return;
@@ -62,7 +63,7 @@ public class ServerMonitorPlugin {
     }
 
     private void start() {
-        var config = this.configReference.get();
+        var config = this.configHolder.get();
 
         if (config.discordWebhookUrl().isEmpty()) {
             this.logger.warn("No Webhook url has been set.");
@@ -91,20 +92,17 @@ public class ServerMonitorPlugin {
 
             plugin.stop();
 
-            Config config;
-
             try {
-                config = Config.loadFromYamlFile(plugin.dataDirectory.resolve("config.yml"));
+                plugin.configHolder.reload(plugin.dataDirectory.resolve("config.yml"));
             } catch (IOException e) {
                 plugin.logger.error("Could not load config.yml", e);
                 sender.sendMessage(Component.text("Failed to load config.yml. Please check the console."));
                 return;
             }
 
-            plugin.configReference.set(config);
             plugin.start();
 
-            if (config.discordWebhookUrl().isEmpty()) {
+            if (plugin.configHolder.get().discordWebhookUrl().isEmpty()) {
                 sender.sendMessage(Component.text("ServerMonitor has been reloaded: No Webhook url has been set."));
             } else {
                 sender.sendMessage(Component.text("ServerMonitor has been reloaded!"));
