@@ -11,6 +11,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.scheduler.ScheduledTask;
 import net.kyori.adventure.text.Component;
 import net.okocraft.servermonitor.core.config.ConfigHolder;
+import net.okocraft.servermonitor.core.discord.DiscordWebhookService;
 import net.okocraft.servermonitor.velocity.config.Config;
 import org.slf4j.Logger;
 
@@ -34,7 +35,7 @@ public class ServerMonitorPlugin {
         this.logger = logger;
         this.dataDirectory = dataDirectory;
         this.configHolder = new ConfigHolder<>(Config.DEFAULT, UnaryOperator.identity());
-        this.webhookService = new DiscordWebhookService(this.configHolder);
+        this.webhookService = new DiscordWebhookService();
     }
 
     @Subscribe(order = PostOrder.LAST)
@@ -64,14 +65,15 @@ public class ServerMonitorPlugin {
 
     private void start() {
         var config = this.configHolder.get();
+        var url = config.discordWebhookUrl();
 
-        if (config.discordWebhookUrl().isEmpty()) {
+        if (url.isEmpty()) {
             this.logger.warn("No Webhook url has been set.");
             return;
         }
 
-        this.webhookService.start();
-        this.monitorTask = this.proxy.getScheduler().buildTask(this, new ServerStatusChecker(this.proxy, this.webhookService)).repeat(Duration.ofSeconds(config.checkInterval())).schedule();
+        this.webhookService.start(url);
+        this.monitorTask = this.proxy.getScheduler().buildTask(this, new ServerStatusChecker(this.proxy, this.configHolder, this.webhookService)).repeat(Duration.ofSeconds(config.checkInterval())).schedule();
     }
 
     private void stop() {
