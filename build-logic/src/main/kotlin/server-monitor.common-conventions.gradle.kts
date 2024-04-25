@@ -38,4 +38,7 @@ tasks {
     processResources {
         filteringCharset = Charsets.UTF_8.name()
     }
+    test {
+        useJUnitPlatform()
+    }
 }
