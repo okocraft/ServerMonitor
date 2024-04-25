@@ -23,6 +23,7 @@ dependencies {
     testImplementation(libs.junit.jupiter)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testRuntimeOnly(libs.slf4j.simple)
+    testRuntimeOnly(libs.snakeyaml)
 }
 
 java {
