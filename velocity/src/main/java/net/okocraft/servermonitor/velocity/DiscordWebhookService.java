@@ -4,6 +4,7 @@ import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import com.velocitypowered.api.proxy.server.ServerInfo;
 import net.okocraft.servermonitor.core.config.ConfigHolder;
+import net.okocraft.servermonitor.core.util.NamedThreadFactory;
 import net.okocraft.servermonitor.velocity.config.Config;
 import net.okocraft.servermonitor.velocity.config.Notifications;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +28,7 @@ public class DiscordWebhookService {
         this.shutdownIfRunning();
         this.webhook =
                 new WebhookClientBuilder(this.configReference.get().discordWebhookUrl())
-                        .setThreadFactory(r -> new Thread(r, "Server-Status-Notification-Thread"))
+                        .setThreadFactory(NamedThreadFactory.DEFAULT)
                         .setWait(true).build();
     }
 
