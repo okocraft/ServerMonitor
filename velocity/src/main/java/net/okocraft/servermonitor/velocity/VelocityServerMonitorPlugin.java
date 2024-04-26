@@ -14,25 +14,27 @@ import net.okocraft.servermonitor.core.config.ConfigHolder;
 import net.okocraft.servermonitor.core.discord.DiscordWebhookService;
 import net.okocraft.servermonitor.velocity.config.Config;
 import org.slf4j.Logger;
+import org.slf4j.helpers.SubstituteLogger;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.function.UnaryOperator;
 
+import static net.okocraft.servermonitor.core.util.ServerMonitorLogger.logger;
+
 public class VelocityServerMonitorPlugin {
 
     private final ProxyServer proxy;
-    private final Logger logger;
     private final Path dataDirectory;
     private final ConfigHolder<Config> configHolder;
     private final DiscordWebhookService webhookService;
     private ScheduledTask monitorTask;
 
     @Inject
-    public VelocityServerMonitorPlugin(ProxyServer proxy, Logger logger, @DataDirectory Path dataDirectory) {
+    public VelocityServerMonitorPlugin(Logger logger, ProxyServer proxy, @DataDirectory Path dataDirectory) {
+        ((SubstituteLogger) logger()).setDelegate(logger);
         this.proxy = proxy;
-        this.logger = logger;
         this.dataDirectory = dataDirectory;
         this.configHolder = new ConfigHolder<>(Config.DEFAULT, UnaryOperator.identity());
         this.webhookService = new DiscordWebhookService();
@@ -40,19 +42,19 @@ public class VelocityServerMonitorPlugin {
 
     @Subscribe(order = PostOrder.LAST)
     public void onEnable(ProxyInitializeEvent ignored) {
-        this.logger.info("Loading config.yml...");
+        logger().info("Loading config.yml...");
 
         try {
             this.configHolder.load(this.dataDirectory.resolve("config.yml"));
         } catch (IOException e) {
-            this.logger.error("Could not load config.yml", e);
+            logger().error("Could not load config.yml", e);
             return;
         }
 
         this.start();
         this.proxy.getCommandManager().register("smvreload", new ReloadCommand());
 
-        this.logger.info("Successfully enabled!");
+        logger().info("Successfully enabled!");
     }
 
     @Subscribe(order = PostOrder.FIRST)
@@ -60,7 +62,7 @@ public class VelocityServerMonitorPlugin {
         this.proxy.getCommandManager().unregister("smvreload");
         this.stop();
 
-        this.logger.info("Successfully disabled!");
+        logger().info("Successfully disabled!");
     }
 
     private void start() {
@@ -68,7 +70,7 @@ public class VelocityServerMonitorPlugin {
         var url = config.discordWebhookUrl();
 
         if (url.isEmpty()) {
-            this.logger.warn("No Webhook url has been set.");
+            logger().warn("No Webhook url has been set.");
             return;
         }
 
@@ -97,7 +99,7 @@ public class VelocityServerMonitorPlugin {
             try {
                 plugin.configHolder.reload(plugin.dataDirectory.resolve("config.yml"));
             } catch (IOException e) {
-                plugin.logger.error("Could not load config.yml", e);
+                logger().error("Could not load config.yml", e);
                 sender.sendMessage(Component.text("Failed to load config.yml. Please check the console."));
                 return;
             }
