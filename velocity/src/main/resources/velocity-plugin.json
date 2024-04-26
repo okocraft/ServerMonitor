@@ -6,5 +6,5 @@
   "authors": [
     "Siroshun09"
   ],
-  "main": "net.okocraft.servermonitor.velocity.ServerMonitorPlugin"
+  "main": "net.okocraft.servermonitor.velocity.VelocityServerMonitorPlugin"
 }

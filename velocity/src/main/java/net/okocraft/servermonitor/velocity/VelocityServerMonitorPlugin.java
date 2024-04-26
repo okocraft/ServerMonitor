@@ -20,7 +20,7 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.util.function.UnaryOperator;
 
-public class ServerMonitorPlugin {
+public class VelocityServerMonitorPlugin {
 
     private final ProxyServer proxy;
     private final Logger logger;
@@ -30,7 +30,7 @@ public class ServerMonitorPlugin {
     private ScheduledTask monitorTask;
 
     @Inject
-    public ServerMonitorPlugin(ProxyServer proxy, Logger logger, @DataDirectory Path dataDirectory) {
+    public VelocityServerMonitorPlugin(ProxyServer proxy, Logger logger, @DataDirectory Path dataDirectory) {
         this.proxy = proxy;
         this.logger = logger;
         this.dataDirectory = dataDirectory;
@@ -90,7 +90,7 @@ public class ServerMonitorPlugin {
         public void execute(Invocation invocation) {
             var sender = invocation.source();
 
-            var plugin = ServerMonitorPlugin.this;
+            var plugin = VelocityServerMonitorPlugin.this;
 
             plugin.stop();
 
