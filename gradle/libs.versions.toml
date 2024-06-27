@@ -10,7 +10,7 @@ snakeyaml = "2.2"
 shadow = "8.1.7"
 
 # testing library
-junit = "5.10.2"
+junit = "5.10.3"
 
 # test environment
 mockito = "5.12.0"
