@@ -10,6 +10,7 @@ repositories {
 
 dependencies {
     compileOnly(libs.platform.paper)
+    testImplementation(libs.platform.paper)
 }
 
 tasks {
