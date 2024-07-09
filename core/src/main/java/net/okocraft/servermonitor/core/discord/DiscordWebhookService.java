@@ -7,18 +7,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class DiscordWebhookService {
 
     private final StampedLock lock = new StampedLock();
     private volatile WebhookClient webhook;
 
-    public void start(@NotNull String url) {
+    public void start(@NotNull String url, long threadId) {
         long stamp = this.lock.writeLock();
 
         try {
             this.shutdownIfRunningAtUnsyncronized();
-            this.webhook = new WebhookClientBuilder(url).setThreadFactory(NamedThreadFactory.DEFAULT).setWait(true).build();
+            this.webhook = new WebhookClientBuilder(url).setThreadId(threadId).setThreadFactory(NamedThreadFactory.DEFAULT).setWait(true).build();
         } finally {
             this.lock.unlockWrite(stamp);
         }
@@ -32,6 +33,10 @@ public class DiscordWebhookService {
         } finally {
             this.lock.unlockWrite(stamp);
         }
+    }
+
+    public void sendIfRunning(@NotNull Supplier<String> supplier) {
+        this.executeIfRunning(webhook -> webhook.send(supplier.get()));
     }
 
     public void executeIfRunning(@NotNull Consumer<WebhookClient> action) {

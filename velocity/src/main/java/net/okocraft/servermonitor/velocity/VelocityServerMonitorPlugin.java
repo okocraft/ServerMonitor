@@ -70,14 +70,12 @@ public class VelocityServerMonitorPlugin {
 
     private void start() {
         var config = this.configHolder.get();
-        var url = config.discordWebhookUrl();
 
-        if (url.isEmpty()) {
+        if (!config.setup(this.webhookService)) {
             logger().warn("No Webhook url has been set.");
             return;
         }
 
-        this.webhookService.start(url);
         this.monitorTask = this.proxy.getScheduler().buildTask(this, new ServerStatusChecker(this.proxy, this.configHolder, this.webhookService)).repeat(Duration.ofSeconds(config.checkInterval())).schedule();
     }
 
@@ -111,7 +109,7 @@ public class VelocityServerMonitorPlugin {
 
             plugin.start();
 
-            if (plugin.configHolder.get().discordWebhookUrl().isEmpty()) {
+            if (plugin.configHolder.get().webhookUrl().isEmpty()) {
                 sender.sendMessage(Component.text("ServerMonitor has been reloaded: No Webhook url has been set."));
             } else {
                 sender.sendMessage(Component.text("ServerMonitor has been reloaded!"));
