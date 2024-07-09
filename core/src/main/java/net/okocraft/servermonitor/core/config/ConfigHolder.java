@@ -50,7 +50,11 @@ public final class ConfigHolder<C extends Record> {
     private static boolean applyDefaults(@NotNull MapNode defaultNode, @NotNull MapNode target) {
         boolean applied = false;
         for (var defaultEntry : defaultNode.value().entrySet()) {
-            if (!target.containsKey(defaultEntry.getKey())) {
+            if (target.containsKey(defaultEntry.getKey())) {
+                if (defaultEntry.getValue() instanceof MapNode child) {
+                    applied |= applyDefaults(child, target.getOrCreateMap(defaultEntry.getKey()));
+                }
+            } else {
                 applied = true;
                 target.set(defaultEntry.getKey(), defaultEntry.getValue());
             }
