@@ -21,6 +21,7 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.util.function.UnaryOperator;
 
+import static net.okocraft.servermonitor.core.util.ServerMonitorLogger.logDebug;
 import static net.okocraft.servermonitor.core.util.ServerMonitorLogger.logger;
 
 public class VelocityServerMonitorPlugin {
@@ -50,6 +51,8 @@ public class VelocityServerMonitorPlugin {
             logger().error("Could not load config.yml", e);
             return;
         }
+
+        logDebug(this.configHolder.get().debug());
 
         this.start();
         this.proxy.getCommandManager().register("smvreload", new ReloadCommand());
@@ -103,6 +106,8 @@ public class VelocityServerMonitorPlugin {
                 sender.sendMessage(Component.text("Failed to load config.yml. Please check the console."));
                 return;
             }
+
+            logDebug(plugin.configHolder.get().debug());
 
             plugin.start();
 

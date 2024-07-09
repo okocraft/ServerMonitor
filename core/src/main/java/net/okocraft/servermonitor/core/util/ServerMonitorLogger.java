@@ -8,6 +8,7 @@ import org.slf4j.helpers.SubstituteLogger;
 public final class ServerMonitorLogger {
 
     private static final SubstituteLogger LOGGER = new SubstituteLogger("ServerMonitor", null, true);
+    private static final SubstituteLogger DEBUG_LOGGER = new SubstituteLogger("ServerMonitor-Debug", null, true);
 
     static {
         try {
@@ -24,6 +25,24 @@ public final class ServerMonitorLogger {
      */
     public static @NotNull Logger logger() {
         return LOGGER;
+    }
+
+    /**
+     * Gets ServerMonitor's {@link Logger} for debugging.
+     *
+     * @return ServerMonitor's {@link Logger} for debugging.
+     */
+    public static @NotNull Logger debug() {
+        return DEBUG_LOGGER;
+    }
+
+    /**
+     * Enables or disables logging debugs.
+     *
+     * @param enabled new state
+     */
+    public static void logDebug(boolean enabled) {
+        DEBUG_LOGGER.setDelegate(enabled ? LOGGER : null);
     }
 
     private ServerMonitorLogger() {
